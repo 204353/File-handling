@@ -1,0 +1,44 @@
+import pickle
+class Database:
+    def __init__(self, chapter, topic, reflection = None, notes = None):
+        self.chapter = chapter
+        self.topic = topic
+        self.reflection = reflection
+        self.notes = notes
+    def setreflection(self):
+        while True:
+            try:
+                print("What is your level of understanding for chapter " + i.chapter + ": " + i.topic+"(1-5)")
+                x = int(input())
+                if x < 6 and x > 0:
+                    self.reflection = x
+                    break
+                else:
+                    print("You must enter a number between 1 and 5.")
+            except ValueError:
+                print("Enter a number between 1 to 5.")
+    def setnotes(self):
+        notes = input("Do you want to add any notes?(y/n)\n")
+        if notes == "y":
+            notes = input("Enter your notes:\n")
+            self.notes = notes
+    def getreflection(self):
+        return self.reflection
+    def getnotes(self):
+        return self.notes
+    def __repr__(self):
+        return self.chapter + self.topic
+database = []
+with open("Newpractical.txt", "r") as whole_file:
+    for line in whole_file:
+        x = line.split(" : ")
+        y = x[1].strip()
+        database.append(Database(x[0], y))
+
+for i in database:
+    with open("practical.pickle","wb") as ickle:
+        pickle.dump(i, ickle)
+
+for i in database:
+    i.setreflection()
+    i.setnotes()
