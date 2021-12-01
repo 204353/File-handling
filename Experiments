@@ -38,7 +38,36 @@ with open("Newpractical.txt", "r") as whole_file:
 for i in database:
     with open("practical.pickle","wb") as ickle:
         pickle.dump(i, ickle)
-
-for i in database:
-    i.setreflection()
-    i.setnotes()
+import tkinter as tk
+root = tk.Tk()
+root.geometry("1366x720")
+root.grid_columnconfigure((0,1), weight=1)
+mylabel = tk.Label(root)
+entry = tk.Entry(root)
+i = 0
+def lol():
+    global i
+    if i < len(database):
+        startbutton['text'] = ''
+        database[i].reflection =entry.get()
+        mylabel['text'] = "How confident are you (1-5) on chapter " + database[i].chapter + ": " + database[i].topic
+        button['text'] = 'Next'
+        i += 1
+    else:
+        mylabel['text'] = "You have nothing else to do!"
+newlabel = tk.Label(root)
+button = tk.Button(root, command=lol, width=30)
+quit = tk.Button(root, text="Quit", command=quit, width=30)
+startbutton = tk.Button(root, text='Start', command=lol, bg="#00ff00")
+def show():
+    newlabel['text'] = x[0].bullshit + x[1].bullshit
+threelabel = tk.Label(root, text="This section allows you to check back on your confidence and any notes that you have made.")
+showme = tk.Button(root, text="SHOW", command=show, width=30)
+startbutton.grid(row=2)
+mylabel.grid(row=3, column=0)
+entry.grid(row=3, column=1, sticky='ew')
+button.grid(row=4)
+quit.grid(row=5)
+newlabel.grid(row=6)
+showme.grid(row=7)
+root.mainloop()
