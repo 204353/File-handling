@@ -46,22 +46,51 @@ entry = tk.Entry(root)
 i = 0
 def lol():
     global i
-    startbutton.grid_remove()
-    if i < len(database):
-        startbutton['text'] = ''
-        database[i].reflection =entry.get()
-        mylabel['text'] = "How confident are you (1-5) on chapter " + database[i].chapter + ": " + database[i].topic +"?:"
-        button['text'] = 'Next'
-        i += 1
+    x = entry.get()
+    if len(x) > 0:
+        try:
+            x = int(x)
+            if i < len(database):
+                startbutton['text'] = ''
+                if x > 5 or x< 1:
+                    newlabel['text'] = "Your confidence must be between 1 and 5"
+                else:
+                    database[i].reflection = x
+                    database[i].notes = theentry.get()
+                    mylabel['text'] = "How confident are you (1-5) on chapter " + database[i].chapter + ": " + database[i].topic +"?:"
+                    newlabel['text'] = ""
+                    i += 1
+            else:
+                newlabel['text'] = "You have nothing else to do!"
+        except ValueError:
+            newlabel['text'] = "Your confidence must be between 1 and 5"
     else:
-        mylabel['text'] = "You have nothing else to do!"
+        newlabel['text'] = "Please enter a number between 1 and 5"
+def start():
+    global i 
+    mylabel.grid(row=3, column=0)
+    entry.grid(row=3, column=1, sticky='ew')
+    thelabel.grid(row=4, column=0)
+    theentry.grid(row=4, column=1, sticky="ew")
+    newlabel.grid(row=5)
+    button.grid(row=6, sticky="nsew", columnspan =2)
+    view.grid(row=7, sticky="nsew", columnspan =2)
+    quit.grid(row=8, sticky="nsew", columnspan =2)
+    mylabel['text'] = "How confident are you (1-5) on chapter" + database[i].chapter + ": " + database[i].topic +"?:"
+    thelabel['text'] = "Enter any notes you have here:"
+    i += 1
+    startbutton.grid_remove()
+def view():
+    newwindow = tk.Toplevel(root)
+    newwindow.grid_columnconfigure((0,1), weight=1)
+    lol = tk.Label(newwindow, text='lol')
+    lol.grid(row = 1, column =0)
 newlabel = tk.Label(root)
-button = tk.Button(root, command=lol, width=30)
+button = tk.Button(root, text="Next", command=lol, width=30)
 quit = tk.Button(root, text="Quit", command=quit, width=30)
-startbutton = tk.Button(root, text='Start', command=lol, bg="#00ff00")
-startbutton.grid(row=2)
-mylabel.grid(row=3, column=0)
-entry.grid(row=3, column=1, sticky='ew')
-button.grid(row=4)
-quit.grid(row=5)
+thelabel = tk.Label(root)
+theentry = tk.Entry(root)
+view = tk.Button(root, text="View", command=view, width=30)
+startbutton = tk.Button(root, text='Start', command=start, bg="#00ff00")
+startbutton.grid(row=2, sticky="nsew", columnspan = 2)
 root.mainloop()
