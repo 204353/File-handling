@@ -1,10 +1,10 @@
 import pickle
 class Database:
-    def __init__(self, chapter, topic, reflection = None, notes = None):
+    def __init__(self, chapter, topic):
         self.chapter = chapter
         self.topic = topic
-        self.reflection = reflection
-        self.notes = notes
+        self.reflection = ""
+        self.notes = ""
     def setreflection(self):
         while True:
             try:
@@ -55,9 +55,11 @@ def lol():
                 if x > 5 or x< 1:
                     newlabel['text'] = "Your confidence must be between 1 and 5"
                 else:
-                    database[i].reflection = x
-                    database[i].notes = theentry.get()
-                    mylabel['text'] = "How confident are you (1-5) on chapter " + database[i].chapter + ": " + database[i].topic +"?:"
+                    database[i-1].reflection = x
+                    database[i-1].notes = theentry.get()
+                    entry.delete(0, tk.END)
+                    theentry.delete(0, tk.END)
+                    mylabel['text'] = "How confident are you (1-5) on chapter  " + database[i].chapter + ": " + database[i].topic +"?:"
                     newlabel['text'] = ""
                     i += 1
             else:
@@ -68,9 +70,9 @@ def lol():
         newlabel['text'] = "Please enter a number between 1 and 5"
 def start():
     global i 
-    mylabel.grid(row=3, column=0)
+    mylabel.grid(row=3, column=0, sticky = "w")
     entry.grid(row=3, column=1, sticky='ew')
-    thelabel.grid(row=4, column=0)
+    thelabel.grid(row=4, column=0, sticky="ew")
     theentry.grid(row=4, column=1, sticky="ew")
     newlabel.grid(row=5)
     button.grid(row=6, sticky="nsew", columnspan =2)
@@ -80,11 +82,34 @@ def start():
     thelabel['text'] = "Enter any notes you have here:"
     i += 1
     startbutton.grid_remove()
+
 def view():
     newwindow = tk.Toplevel(root)
-    newwindow.grid_columnconfigure((0,1), weight=1)
-    lol = tk.Label(newwindow, text='lol')
-    lol.grid(row = 1, column =0)
+    newwindow.grid_columnconfigure((0,1), weight= 1)
+    for i in range(0, len(database)+1):
+        for j in range(4):
+            if i != 0:
+                if j == 0:
+                    x = str(database[i-1].chapter)
+                elif j ==1:
+                    x = str(database[i-1].topic)
+                elif j == 2:
+                    x = str(database[i-1].reflection)
+                elif j == 3:
+                    x = str(database[i-1].notes)
+            elif i == 0:
+                if j == 0:
+                    x = 'Chapter'
+                elif j == 1:
+                    x = "Topic"
+                elif j == 2:
+                    x = "Confidence"
+                elif j == 3:
+                    x = "Notes"
+            firstlabel = tk.Label(newwindow, text=x)
+            if j == 2 or j == 3:
+                firstlabel['width'] = 20
+            firstlabel.grid(row=i,column = j, columnspan=1, sticky = "w")
 newlabel = tk.Label(root)
 button = tk.Button(root, text="Next", command=lol, width=30)
 quit = tk.Button(root, text="Quit", command=quit, width=30)
